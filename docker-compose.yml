@@ -1,11 +1,12 @@
+version: '3.8'
 services:
   app:
     build: .
     ports:
       - 8000:8000
-      - 11434:11434
+      - 5678:5678
     volumes:
-      - code:/code
+      - .:/code
     command: uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
     restart: always
     depends_on:
@@ -17,7 +18,7 @@ services:
   ollama:
     image: ollama/ollama:latest
     ports:
-      - 11434:11434
+      - 7869:11434
     volumes:
       - code:/code
       - data:/root/.ollama
