@@ -1,12 +1,11 @@
-version: '3.8'
 services:
   app:
     build: .
     ports:
       - 8000:8000
-      - 5678:5678
+      - 11434:11434
     volumes:
-      - .:/code
+      - code:/code
     command: uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
     restart: always
     depends_on:
@@ -18,10 +17,10 @@ services:
   ollama:
     image: ollama/ollama:latest
     ports:
-      - 7869:11434
+      - 11434:11434
     volumes:
-      - .:/code
-      - ./ollama/ollama:/root/.ollama
+      - code:/code
+      - data:/root/.ollama
     container_name: ollama
     pull_policy: always
     tty: true
@@ -36,7 +35,7 @@ services:
     image: ghcr.io/open-webui/open-webui:main
     container_name: ollama-webui
     volumes:
-      - ./ollama/ollama-webui:/app/backend/data
+      - webui:/app/backend/data
     depends_on:
       - ollama
     ports:
@@ -57,4 +56,8 @@ services:
 networks:
   ollama-docker:
     external: false
-  
+
+volumes:
+  data:
+  code:
+  webui:
